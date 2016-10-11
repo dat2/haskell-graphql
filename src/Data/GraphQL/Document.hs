@@ -16,12 +16,11 @@ data Document = Document [Definition]
   deriving (Show,Eq)
 
 type Name = String
-type TypeCondition = String
 
 data Definition =
     Operation OperationType (Maybe Name) [VariableDefinition] [Directive] SelectionSet
   | Selection SelectionSet
-  | Fragment Name String [Directive] [SelectionSet]
+  | Fragment Name String [Directive] SelectionSet
   deriving (Show,Eq)
 
 data OperationType =
@@ -36,7 +35,7 @@ data VariableDefinition = VariableDefinition String Type DefaultValue
 
 data Type =
     NamedType String
-  | ListType [Type]
+  | ListType Type
   | NonNullType Type
   deriving (Show,Eq)
 
@@ -61,7 +60,7 @@ data SelectionSet = SelectionSet [Selection]
   deriving (Show,Eq)
 
 data Selection =
-    Field (Maybe Name) Name [Argument] [Directive] [SelectionSet]
+    Field (Maybe Name) Name [Argument] [Directive] (Maybe SelectionSet)
   | FragmentSpread Name [Directive]
-  | InlineFragment TypeCondition [Directive] [SelectionSet]
+  | InlineFragment (Maybe String) [Directive] SelectionSet
   deriving (Show,Eq)
